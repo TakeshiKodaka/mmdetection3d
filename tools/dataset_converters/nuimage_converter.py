@@ -9,25 +9,52 @@ import numpy as np
 from nuimages import NuImages
 from nuimages.utils.utils import mask_decode, name_to_index_mapping
 
-nus_categories = ('car', 'truck', 'trailer', 'bus', 'construction_vehicle',
-                  'bicycle', 'motorcycle', 'pedestrian', 'traffic_cone',
-                  'barrier')
+# nus_categories = ('car', 'truck', 'trailer', 'bus', 'construction_vehicle',
+#                   'bicycle', 'motorcycle', 'pedestrian', 'traffic_cone',
+#                   'barrier')
+# nus_categories = ('car', 'person', 'bike', 'other')
+nus_categories = ('car', 'person', 'bike')
 
+# NAME_MAPPING = {
+#     'movable_object.barrier': 'barrier',
+#     'vehicle.bicycle': 'bicycle',
+#     'vehicle.bus.bendy': 'bus',
+#     'vehicle.bus.rigid': 'bus',
+#     'vehicle.car': 'car',
+#     'vehicle.construction': 'construction_vehicle',
+#     'vehicle.motorcycle': 'motorcycle',
+#     'human.pedestrian.adult': 'pedestrian',
+#     'human.pedestrian.child': 'pedestrian',
+#     'human.pedestrian.construction_worker': 'pedestrian',
+#     'human.pedestrian.police_officer': 'pedestrian',
+#     'movable_object.trafficcone': 'traffic_cone',
+#     'vehicle.trailer': 'trailer',
+#     'vehicle.truck': 'truck',
+# }
 NAME_MAPPING = {
-    'movable_object.barrier': 'barrier',
-    'vehicle.bicycle': 'bicycle',
-    'vehicle.bus.bendy': 'bus',
-    'vehicle.bus.rigid': 'bus',
+    # 'animal': 'other',
+    'human.pedestrian.adult': 'person',
+    'human.pedestrian.child': 'person',
+    'human.pedestrian.construction_worker': 'person',
+    'human.pedestrian.personal_mobility': 'person',
+    'human.pedestrian.police_officer': 'person',
+    # 'human.pedestrian.stroller': 'person',
+    'human.pedestrian.wheelchair': 'person',
+    # 'movable_object.barrier': 'other',
+    # 'movable_object.debris': 'other',
+    # 'movable_object.pushable_pullable': 'other',
+    # 'movable_object.trafficcone': 'other',
+    # 'static_object.bicycle_rack': 'other',
+    'vehicle.bicycle': 'bike',
+    'vehicle.bus.bendy': 'car',
+    'vehicle.bus.rigid': 'car',
     'vehicle.car': 'car',
-    'vehicle.construction': 'construction_vehicle',
-    'vehicle.motorcycle': 'motorcycle',
-    'human.pedestrian.adult': 'pedestrian',
-    'human.pedestrian.child': 'pedestrian',
-    'human.pedestrian.construction_worker': 'pedestrian',
-    'human.pedestrian.police_officer': 'pedestrian',
-    'movable_object.trafficcone': 'traffic_cone',
-    'vehicle.trailer': 'trailer',
-    'vehicle.truck': 'truck',
+    'vehicle.construction': 'car',
+    'vehicle.emergency.ambulance': 'car',
+    'vehicle.emergency.police': 'car',
+    'vehicle.motorcycle': 'bike',
+    'vehicle.trailer': 'car',
+    'vehicle.truck': 'car',
 }
 
 
@@ -140,6 +167,9 @@ def get_img_annos(nuim, img_info, cat2id, out_dir, data_root, seg_root):
                 segmentation=mask_anno,
                 iscrowd=0)
             annotations.append(data_anno)
+        else:
+            dummy = 0
+            # print(f"W: invalid category_name = {category_name}")
 
     # after process, save semantic masks
     img_filename = img_info['file_name']
